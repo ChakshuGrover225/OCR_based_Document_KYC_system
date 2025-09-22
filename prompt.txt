@@ -1,0 +1,126 @@
+Full Project Prompt: OCR-Based Document KYC System
+
+I am building an OCR-based document KYC system that extracts textual data from Aadhaar cards using a YOLOv8 model. I want to develop this as a web-accessible application capable of handling high loads (1000 requests per minute). I need the system to be robust, scalable, and production-ready, while following best practices for ML engineering and software development.
+
+Project Vision & Goal
+
+The app allows users to upload an Aadhaar image, automatically preprocess it, and feed it into a YOLOv8 model.
+
+The YOLO model detects 5 predefined labels on the card and optionally crops the corresponding regions.
+
+The output is textual JSON, providing label names, detected text, confidence scores, and coordinates.
+
+The app should be fast, scalable, and maintainable, supporting production-level deployment.
+
+Current Tech Stack
+
+Backend/API: Flask (Python)
+
+Model: YOLOv8 (Ultralytics)
+
+Image Processing: OpenCV, Pillow, NumPy
+
+Containerization & Deployment: Docker + Gunicorn + Nginx, scalable via Kubernetes or cloud services
+
+Versioning & Tracking: Git for code, DVC/S3 for model weights
+
+Testing: Pytest for automated testing
+
+Environment Management: Python venv (or conda)
+
+Monitoring: Logs, latency, error rate, model performance tracking
+
+Project Folder Structure
+OCR_based_Document_KYC_system/      ← project root
+│
+├── app/                            ← core app logic
+│   ├── __init__.py
+│   ├── main.py                     ← Flask entrypoint
+│   ├── routes.py                   ← API endpoints (/upload, /predict)
+│   ├── preprocessing.py            ← image cleaning, resizing, normalization
+│   ├── inference.py                ← loads YOLOv8 model, runs detection
+│   ├── utils.py                    ← helper functions (logging, formatting)
+│   ├── config.py                   ← paths, thresholds, env vars
+│   └── resources/
+│       ├── yolov8_model/           ← model weights (ignored in Git)
+│       └── sample_images/          ← anonymized small test images
+│
+├── tests/                          ← automated tests
+│   ├── test_preprocessing.py
+│   ├── test_inference.py
+│   └── test_api.py
+│
+├── work_env/                        ← Python virtual environment (ignored in Git)
+├── requirements.txt                ← Python dependencies
+├── .gitignore                       ← ignores models, env, secrets
+├── README.md                        ← project documentation
+├── .env                             ← API keys and secrets (not tracked)
+├── Dockerfile                       ← containerization
+├── gunicorn.conf.py                 ← production server config
+└── model_registry.json              ← model version tracking
+
+Key Best Practices
+
+Environment: work_env/ lives in the project root; ignored in Git.
+
+Version Control:
+
+Git tracks code, configs, docs, sample images.
+
+Large files like YOLO weights are stored in DVC or cloud storage.
+
+Use model_registry.json to manage model versions.
+
+Testing: tests/ ensures preprocessing, inference, and APIs work correctly.
+
+Deployment:
+
+Preload model in memory to avoid reload on each request.
+
+Use Gunicorn workers + Docker + Load Balancer for scaling.
+
+Optional: Async queue (Celery + Redis) for heavy jobs.
+
+Security & Privacy:
+
+.env stores secrets, not tracked.
+
+No sensitive Aadhaar images pushed to GitHub.
+
+Monitoring & Maintenance: Track latency, error rate, model performance, data drift, and retrain as needed.
+
+Request Flow
+
+User uploads Aadhaar image → hits /predict endpoint.
+
+preprocessing.py cleans and formats the image → returns a tensor.
+
+inference.py runs YOLOv8 → detects labels, optionally crops regions.
+
+Results formatted (via utils.py) → JSON returned to user:
+
+{
+  "Name": {"text": "XXXX", "confidence": 0.95, "bbox": [x1, y1, x2, y2]},
+  "DOB": {"text": "XX-XX-XXXX", "confidence": 0.92, "bbox": [...]},
+  ...
+}
+
+GitHub Strategy
+
+Push: app/ code, tests/, .gitignore, README.md, requirements.txt, configs, sample images.
+
+Ignore: work_env/, model weights, datasets, .env, logs.
+
+Add selective files via git add <file> or rely on .gitignore.
+
+Future Enhancements
+
+Add a frontend (React/Angular) for web access.
+
+Add OCR post-processing to clean extracted text.
+
+Add multi-document support for batch processing.
+
+Integrate monitoring dashboards (Prometheus/Grafana).
+
+Add role-based access for security compliance.

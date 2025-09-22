@@ -1,0 +1,32 @@
+day 1
+
+used py -m venv work_env to create environemnt
+
+
+this is the strcuture:
+
+4 - kyc system/
+│── app/  
+│   ├── __init__.py  
+│   ├── main.py               # Flask entrypoint  
+│   ├── routes.py             # API routes (upload, predict)  
+│   ├── preprocessing.py      # Image preprocessing functions  
+│   ├── inference.py          # YOLOv8 inference logic  
+│   ├── utils.py              # Helper funcs (logging, error handling)  
+│   ├── config.py             # Config vars (paths, thresholds)  
+│   └── resources/  
+│       ├── yolov8_model/     # model.pt + version info  
+│       └── sample_images/    # test images  
+│  
+│── tests/  
+│   ├── test_preprocessing.py  
+│   ├── test_inference.py  
+│   └── test_api.py  
+│  
+│── requirements.txt          # Python deps (Flask, ultralytics, etc.)  
+│── Dockerfile                # Containerization  
+│── gunicorn.conf.py          # For scaling in prod  
+│── .env                      # Secrets (env vars)  
+│── README.md                 # Docs  
+│── .gitignore  
+│── model_registry.json       # Metadata: model version, date, checksum  

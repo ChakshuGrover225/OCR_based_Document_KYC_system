@@ -1,0 +1,43 @@
+# ----------------------------
+# Python cache and virtual env
+# ----------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/                 # your Python environment folder
+
+# ----------------------------
+# Environment files
+# ----------------------------
+.env                  # secrets like API keys, database URLs
+
+# ----------------------------
+# Model weights and checkpoints
+# ----------------------------
+app/resources/yolov8_model/*.pt   # YOLO model weights
+*.ckpt                            # any checkpoint files
+
+# ----------------------------
+# Dataset / Large files
+# ----------------------------
+data/
+*.jpg
+*.jpeg
+*.png
+*.bmp
+
+# ----------------------------
+# Logs and temporary files
+# ----------------------------
+*.log
+*.tmp
+tmp/
+logs/
+
+
+
+
+
+# excludes work env file from git add
+work_env/
