@@ -41,3 +41,6 @@ logs/
 
 # excludes work env file from git add
 work_env/
+
+
+prompt.txt
