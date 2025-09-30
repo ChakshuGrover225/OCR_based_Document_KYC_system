@@ -58,14 +58,18 @@ def contrast_change(input_image_path, threshold):
     return input_image_path[:-4]+"_monochrome.jpg"
 
 
-def processed_image(input_image_path, aligned_image_path, grey_image_path, contrasted_image_path):
+def processed_image(input_image_path):
 
     img = Image.open(input_image_path)
     img.save("uploaded_images/processed_image.jpg")
 
-    os.remove(aligned_image_path)
-    os.remove(grey_image_path)
-    os.remove(contrasted_image_path)
+    directory = r"uploaded_images"  # your folder path
+    keep_files = ["processed_image.jpg", "11.jpg"]  # files to keep
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        if os.path.isfile(file_path) and filename not in keep_files:
+            os.remove(file_path)
+            print(f"Deleted: {filename}")
 
 
 
@@ -78,8 +82,8 @@ def preprocess_image(image_path):
     print("after realign", aligned_image_path)
     grey_image_path = img_to_grey(aligned_image_path)
     print("after img to grey")
-    contrasted_image_path = contrast_change(grey_image_path, 150)
-    processed_image(contrasted_image_path, aligned_image_path, grey_image_path, contrasted_image_path)
+    #contrasted_image_path = contrast_change(grey_image_path, 150)
+    processed_image(grey_image_path)
     print("after image preprocessed")
 
 
