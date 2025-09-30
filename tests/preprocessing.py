@@ -5,6 +5,7 @@ constrast it
 straigten it 
 
 '''
+import os
 from PIL import Image
 from PIL import ImageFile
 import cv2
@@ -36,18 +37,35 @@ def realign_img(input_img_path):
     # Rotate the image to correct the skew
     rotated = cv2.warpAffine(image, cv2.getRotationMatrix2D((image.shape[1] // 2, image.shape[0] // 2), angle, 1), (image.shape[1], image.shape[0]), flags=cv2.INTER_NEAREST)
 
+    input_img_path = input_img_path[:-4]+"_realigned.jpg"
     cv2.imwrite(input_img_path, rotated)
     return input_img_path
 
 
-def cropped_img(image):
+def img_to_grey(input_image_path):
+    print('img_to_grey')
+    img = Image.open(input_image_path).convert('L')
+    input_image_path = input_image_path[:-4]+"_grey.jpg"
+    img.save(input_image_path)
+    return input_image_path
     pass
 
 
-def img_to_grey(image):
-    pass
+def contrast_change(input_image_path, threshold):
+    img = cv2.imread(input_image_path, cv2.IMREAD_GRAYSCALE)
+    _, mono = cv2.threshold(img, threshold, 255, cv2.THRESH_BINARY)
+    cv2.imwrite(input_image_path[:-4]+"_monochrome.jpg", mono)
+    return input_image_path[:-4]+"_monochrome.jpg"
 
 
+def processed_image(input_image_path, aligned_image_path, grey_image_path, contrasted_image_path):
+
+    img = Image.open(input_image_path)
+    img.save("uploaded_images/processed_image.jpg")
+
+    os.remove(aligned_image_path)
+    os.remove(grey_image_path)
+    os.remove(contrasted_image_path)
 
 
 
@@ -56,8 +74,17 @@ def img_to_grey(image):
 
 def preprocess_image(image_path):
     
-    temp_image_path = realign_img(image_path)
-    print("after realign", temp_image_path)
-    return temp_image_path
+    aligned_image_path = realign_img(image_path)
+    print("after realign", aligned_image_path)
+    grey_image_path = img_to_grey(aligned_image_path)
+    print("after img to grey")
+    contrasted_image_path = contrast_change(grey_image_path, 150)
+    processed_image(contrasted_image_path, aligned_image_path, grey_image_path, contrasted_image_path)
+    print("after image preprocessed")
+
+
+
+
+
     
-preprocess_image(r'uploaded_images\image-test_unaligned.png')
+preprocess_image(r'uploaded_images\11.jpg')
